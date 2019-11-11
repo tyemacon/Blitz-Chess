@@ -5,8 +5,12 @@ import Square from './Square';
 const Board = ({ board }) => {
   return (
     <div className={styles.board}>
-      {board.map((row) => {
-        return row.map((square) => <Square x={square.position[0]} y={square.position[1]}/>)
+      {board.map((row, i) => {
+        return row.map((square, j) => 
+          <Square key={`${i}${j}`} 
+          x={square.position[0]} 
+          y={square.position[1]} 
+          piece={square.piece}/>)
       })}
     </div>
   )
