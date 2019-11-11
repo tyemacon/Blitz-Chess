@@ -38,6 +38,7 @@ const initializeBoard = () => {
       let square = {
         position: [i, j],
         piece: null,
+        player: null,
       }
       newRow.push(square);
     }

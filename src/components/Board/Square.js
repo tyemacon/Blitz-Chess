@@ -1,9 +1,12 @@
 import React from 'react';
 import styles from './Square.module.css';
 
-const Square = ({ coord }) => {
+const Square = ({ x, y }) => {
   return (
-    <div className={styles.square}>{coord[0]}{coord[1]}</div>
+    <div className={styles.square} 
+         style={{backgroundColor: ((x + y) % 2) ? '#565656' : 'blanchedalmond'}}>
+      
+    </div>
   )
 }
 

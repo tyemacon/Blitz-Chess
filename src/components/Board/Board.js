@@ -6,7 +6,7 @@ const Board = ({ board }) => {
   return (
     <div className={styles.board}>
       {board.map((row) => {
-        return row.map((square) => <Square coord={square.position}/>)
+        return row.map((square) => <Square x={square.position[0]} y={square.position[1]}/>)
       })}
     </div>
   )
