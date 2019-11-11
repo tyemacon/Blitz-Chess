@@ -2,7 +2,7 @@ import Piece from '../Piece';
 import images from '../piece-images';
 
 export default class Pawn extends Piece {
-  constructor(player, x, y){
+  constructor(player){
     super(player, (player === 'ONE' ? images.pawn.white : images.pawn.black))
     this.availableSpaces =  this.availableSpaces.bind(this)
   }

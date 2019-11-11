@@ -6,10 +6,31 @@ export default class Knight extends Piece {
     super(player, (player === 'ONE' ? images.knight.white : images.knight.black))
     this.x = x;
     this.y = y;
-    this.onSelect = this.onSelect.bind(this)
+    this.availableSpaces = this.availableSpaces.bind(this);
   }
 
-  onSelect() {
-    console.log(`clicked ${this.x}${this.selected}`)
+  availableSpaces(x, y, board, player){
+    debugger;
+    let availableSpaces = [];
+    const knightEls = [
+      [-2,1], // up2 -> right1
+      [-2,-1], // up2 -> left1
+      [2, 1], // down2 -> right1
+      [2,-1], // down2 -> left1
+      [-1,-2], // left2 -> up1
+      [1,-2], // left2 -> down1
+      [-1,2], // right2 -> up1
+      [1,2], // right2 -> down1
+    ]
+    knightEls.forEach((el) => {
+      if(this.isValidTile(x + el[0], y + el[1])){
+       if(board[x+el[0]][y+el[1]].piece.player !== player){
+         availableSpaces.push([x+el[0], y+el[1]])
+       }
+      }
+    })
+
+    return availableSpaces;
   }
+
 }

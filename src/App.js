@@ -1,5 +1,5 @@
 import React from 'react';
-import { cloneDeep, debounce } from 'lodash'
+import { cloneDeep } from 'lodash'
 import styles from './App.module.css';
 
 import PlayerCard from './components/PlayerCard';
@@ -15,6 +15,7 @@ export default class App extends React.Component {
     super()
     this.state = {
       board: [],
+      player: 'ONE',
       whiteCaptures: [],
       blackCapture: [],
       selectedX: null,
@@ -24,7 +25,8 @@ export default class App extends React.Component {
     this.onSelect = this.onSelect.bind(this);
   }
   // manage all logic delegated to each piece
-  onSelect = debounce((x, y) => {
+  onSelect(x, y){
+    debugger;
     if(this.state.path.includes(`${x}${y}`)){
       const boardClone = cloneDeep(this.state.board);
       this.state.path.forEach((coord) => {
@@ -32,6 +34,10 @@ export default class App extends React.Component {
         let col = Number(coord[1])
         boardClone[row][col].selected = false;
       })
+      // debugger;
+      let selectedPiece = cloneDeep(this.state.board[this.state.selectedX][this.state.selectedY].piece);
+      boardClone[this.state.selectedX][this.state.selectedY].piece = null;
+      boardClone[x][y].piece = selectedPiece;
       this.setState({
         selectedX: null,
         selectedY: null,
@@ -44,15 +50,11 @@ export default class App extends React.Component {
       }else{
         let selectedPiece = this.state.board[x][y].piece;
         const boardClone = cloneDeep(this.state.board);
-        const availableSpaces = selectedPiece.availableSpaces(x, y);
+        const availableSpaces = selectedPiece.availableSpaces(x, y, this.state.board, this.state.player);
         let path = [];
-        path.push(`${x}${y}`);
-        boardClone[x][y].selected = true;
         availableSpaces.forEach((coord) => {
-          if(!this.state.board[coord[0]][coord[1]].piece){
             boardClone[coord[0]][coord[1]].selected = true;
             path.push(`${coord[0]}${coord[1]}`);
-          }
         })
         this.setState({
           selectedX: x,
@@ -62,7 +64,7 @@ export default class App extends React.Component {
         })
       }
     }
-  }, 100);
+  }
   componentDidMount(){
     this.setState({
       board: initializeBoard()
@@ -101,7 +103,6 @@ const initializeBoard = () => {
       let square = {
         position: [i, j],
         piece: null,
-        player: null,
         selected: false
       }
       newRow.push(square);
