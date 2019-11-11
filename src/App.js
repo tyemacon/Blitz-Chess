@@ -1,5 +1,5 @@
 import React from 'react';
-import { cloneDeep } from 'lodash'
+import { cloneDeep, debounce } from 'lodash'
 import styles from './App.module.css';
 
 import PlayerCard from './components/PlayerCard';
@@ -24,10 +24,19 @@ export default class App extends React.Component {
     this.onSelect = this.onSelect.bind(this);
   }
   // manage all logic delegated to each piece
-  onSelect(x, y) {
-    if(this.state.selectedX === x && this.state.selectedY === y){
+  onSelect = debounce((x, y) => {
+    if(this.state.path.includes(`${x}${y}`)){
+      const boardClone = cloneDeep(this.state.board);
+      this.state.path.forEach((coord) => {
+        let row = Number(coord[0])
+        let col = Number(coord[1])
+        boardClone[row][col].selected = false;
+      })
       this.setState({
-        selectedPiece: null
+        selectedX: null,
+        selectedY: null,
+        board: boardClone,
+        path: []
       })
     }else{
       if(!this.state.board[x][y].piece){
@@ -37,20 +46,23 @@ export default class App extends React.Component {
         const boardClone = cloneDeep(this.state.board);
         const availableSpaces = selectedPiece.availableSpaces(x, y);
         let path = [];
+        path.push(`${x}${y}`);
         boardClone[x][y].selected = true;
         availableSpaces.forEach((coord) => {
           if(!this.state.board[coord[0]][coord[1]].piece){
             boardClone[coord[0]][coord[1]].selected = true;
-            path.push(coord);
+            path.push(`${coord[0]}${coord[1]}`);
           }
         })
         this.setState({
+          selectedX: x,
+          selectedY: y,
           board: boardClone,
           path: path,
         })
       }
     }
-  }
+  }, 100);
   componentDidMount(){
     this.setState({
       board: initializeBoard()
