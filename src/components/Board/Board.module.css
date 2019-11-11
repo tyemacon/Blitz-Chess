@@ -1,0 +1,8 @@
+
+.board {
+  display: flex;
+  flex-wrap: wrap;
+  max-width: 800px;
+  max-height: 800px;
+  box-sizing: border-box;
+}

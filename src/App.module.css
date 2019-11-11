@@ -1,17 +1,23 @@
 
 .game {
   display: grid;
-  grid-template-rows: 20px 800px 20px;
+  grid-template-rows: 50px 800px 20px;
   grid-template-columns: 50px 800 50px;
   grid-template-areas: 
     "header header header"
     "player-one board player-two"
     "footer footer footer";
-  justify-content: center;
-  align-items: center;
   padding: 12px;
 }
 
+.title {
+  grid-column-start: 2;
+  max-height: 100%;
+}
+
 .board {
-  grid-area: "board";
+  grid-area: board;
+  max-width: 100%;
+  max-height: 100%;
+  box-sizing: border-box;
 }

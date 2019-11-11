@@ -1,6 +1,7 @@
 import React from 'react';
 import styles from './App.module.css';
 
+import Board from './components/Board/Board'
 export default class App extends React.Component {
   constructor() {
     super()
@@ -17,7 +18,12 @@ export default class App extends React.Component {
     console.log(this.state.board)
     return (
       <div className={styles.game}>
-        <div className={styles.board}>{this.state.board.map((square) => <div>square</div>)}</div>
+        <div className={StyleSheet.title}>
+          <h3>This is a Game</h3>
+        </div>
+        <div className={styles.board}>
+          <Board board={this.state.board}/>
+        </div>
       </div>
     )
   }
