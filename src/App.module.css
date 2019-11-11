@@ -26,8 +26,10 @@
 
 .playerone {
   grid-area: playerone;
+  padding: 10px;
 }
 
 .playertwo {
   grid-area: playertwo;
+  padding: 10px;
 }

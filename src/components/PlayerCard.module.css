@@ -1,0 +1,17 @@
+.card {
+  display: flex;
+  justify-content: space-between;
+
+}
+
+.playerinfo{
+  color: rebeccapurple;
+  margin: 5px;
+}
+
+.color {
+  width: 40px;
+  height: 40px;
+  border: 1px solid black;
+  margin: 5px;
+}
