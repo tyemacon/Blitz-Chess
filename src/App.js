@@ -1,4 +1,5 @@
 import React from 'react';
+import { cloneDeep } from 'lodash'
 import styles from './App.module.css';
 
 import PlayerCard from './components/PlayerCard';
@@ -13,7 +14,41 @@ export default class App extends React.Component {
   constructor() {
     super()
     this.state = {
-      board: []
+      board: [],
+      whiteCaptures: [],
+      blackCapture: [],
+      selectedX: null,
+      selectedY: null,
+      path: [],
+    }
+    this.onSelect = this.onSelect.bind(this);
+  }
+  // manage all logic delegated to each piece
+  onSelect(x, y) {
+    if(this.state.selectedX === x && this.state.selectedY === y){
+      this.setState({
+        selectedPiece: null
+      })
+    }else{
+      if(!this.state.board[x][y].piece){
+        console.log('Invalid selection')
+      }else{
+        let selectedPiece = this.state.board[x][y].piece;
+        const boardClone = cloneDeep(this.state.board);
+        const availableSpaces = selectedPiece.availableSpaces(x, y);
+        let path = [];
+        boardClone[x][y].selected = true;
+        availableSpaces.forEach((coord) => {
+          if(!this.state.board[coord[0]][coord[1]].piece){
+            boardClone[coord[0]][coord[1]].selected = true;
+            path.push(coord);
+          }
+        })
+        this.setState({
+          board: boardClone,
+          path: path,
+        })
+      }
     }
   }
   componentDidMount(){
@@ -31,7 +66,10 @@ export default class App extends React.Component {
           <PlayerCard player={'ONE'}/>
         </div>
         <div className={styles.board}>
-          <Board board={this.state.board}/>
+          <Board 
+            board={this.state.board}
+            onSelect={this.onSelect}
+          />
         </div>
         <div className={styles.playertwo}>
           <PlayerCard player={'TWO'}/>
@@ -52,6 +90,7 @@ const initializeBoard = () => {
         position: [i, j],
         piece: null,
         player: null,
+        selected: false
       }
       newRow.push(square);
     }

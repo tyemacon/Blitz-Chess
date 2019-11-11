@@ -1,19 +1,23 @@
 .squarewhite {
   display: flex;
-  border: 1px solid black;
   width: 95px;
   height: 95px;
   justify-content: center;
   align-items: center;
   background-color: blanchedalmond;
+  box-sizing: border-box;
 }
 
 .squareblack {
   display: flex;
-  border: 1px solid black;
   width: 95px;
   height: 95px;
   justify-content: center;
   align-items: center;
   background-color: #565656;
+  box-sizing: border-box;
+}
+
+.selected {
+  background-color: 5px solid green;
 }
