@@ -10,7 +10,6 @@ export default class Knight extends Piece {
   }
 
   availableSpaces(x, y, board, player){
-    debugger;
     let availableSpaces = [];
     const knightEls = [
       [-2,1], // up2 -> right1
@@ -24,9 +23,13 @@ export default class Knight extends Piece {
     ]
     knightEls.forEach((el) => {
       if(this.isValidTile(x + el[0], y + el[1])){
-       if(board[x+el[0]][y+el[1]].piece.player !== player){
-         availableSpaces.push([x+el[0], y+el[1]])
-       }
+        if(board[x+el[0]][y+el[1]].piece){
+          if(board[x+el[0]][y+el[1]].piece.player !== player){
+           availableSpaces.push([x+el[0], y+el[1]])
+          }
+        }else{
+          availableSpaces.push([x+el[0], y+el[1]])
+        }
       }
     })
 

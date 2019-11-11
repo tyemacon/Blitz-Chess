@@ -6,10 +6,23 @@ export default class King extends Piece {
     super(player, (player === 'ONE' ? images.king.white : images.king.black))
     this.x = x;
     this.y = y;
-    this.onSelect = this.onSelect.bind(this)
+    this.availableSpaces = this.availableSpaces.bind(this);
   }
 
-  onSelect() {
-    console.log(`clicked ${this.x}${this.selected}`)
+  availableSpaces(x, y, board, player){
+    let availableSpaces = [];
+    let kingMoves = [[1,0], [-1,0],[0,1],[0,-1],[1,1],[1,-1],[-1,1],[-1,-1]];
+    kingMoves.forEach((coord) => {
+      if(this.isValidTile(x + coord[0], y + coord[1])){
+        if(!board[x + coord[0]][y + coord[1]].piece){
+          availableSpaces.push([x + coord[0],y + coord[1]])
+        }else{
+          if(board[x + coord[0]][y + coord[1]].piece.player !== player){
+            availableSpaces.push([x + coord[0],y + coord[1]])
+          }
+        }
+      }
+    })
+    return availableSpaces;
   }
 }

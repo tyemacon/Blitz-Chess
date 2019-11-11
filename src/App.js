@@ -8,7 +8,7 @@ import Pawn from './components/Pieces/Pawn/Pawn';
 import Rook from './components/Pieces/Rook/Rook';
 import Knight from './components/Pieces/Knight/Knight';
 import Bishop from './components/Pieces/Bishop/Bishop';
-import King from './components/Pieces/Knight/Knight';
+import King from './components/Pieces/King/King';
 import Queen from './components/Pieces/Queen/Queen';
 export default class App extends React.Component {
   constructor() {
@@ -26,7 +26,6 @@ export default class App extends React.Component {
   }
   // manage all logic delegated to each piece
   onSelect(x, y){
-    debugger;
     if(this.state.path.includes(`${x}${y}`)){
       const boardClone = cloneDeep(this.state.board);
       this.state.path.forEach((coord) => {
@@ -57,6 +56,7 @@ export default class App extends React.Component {
             path.push(`${coord[0]}${coord[1]}`);
         })
         this.setState({
+          player: this.state.player === 'ONE' ? 'TWO' : 'ONE',
           selectedX: x,
           selectedY: y,
           board: boardClone,
