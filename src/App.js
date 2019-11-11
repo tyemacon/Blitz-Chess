@@ -1,26 +1,41 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import styles from './App.module.css';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+export default class App extends React.Component {
+  constructor() {
+    super()
+    this.state = {
+      board: []
+    }
+  }
+  componentDidMount(){
+    this.setState({
+      board: initializeBoard()
+    })
+  }
+  render() {
+    console.log(this.state.board)
+    return (
+      <div className={styles.game}>
+        <div className={styles.board}>{this.state.board.map((square) => <div>square</div>)}</div>
+      </div>
+    )
+  }
 }
 
-export default App;
+/** Returns an 8x8 chess Board  */
+const initializeBoard = () => {
+  const board = [];
+  for(let i =  0; i < 8; i++){
+    let newRow = [];
+    for(let j = 0; j < 8; j++){
+      let square = {
+        position: [i, j],
+        piece: null,
+      }
+      newRow.push(square);
+    }
+    board.push(newRow);
+  }
+  return board;
+}
