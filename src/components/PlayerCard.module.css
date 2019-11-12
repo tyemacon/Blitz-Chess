@@ -1,13 +1,38 @@
-.card {
-  display: flex;
-  justify-content: space-between;
-  flex-direction: column;
+.playercard {
+  display: grid;
+  width: minmax(200px, 100%);
+  grid-template-rows: repeat(6, 1fr);
+  grid-template-areas:
+    "player"
+    "pawns"
+    "knights"
+    "bishops"
+    "rooks"
+    "queens";
 }
 
-.playerinfo{
-  color: rebeccapurple;
-  margin: 5px;
+.card{
+  display: flex;
+  grid-area: player;
+  justify-content: center;
+  box-sizing: border-box;
+  padding: 5px;
 }
+
+.player{
+  margin: 27px;
+}
+
+.one {
+  background-color: blanchedalmond;
+  color: #565656;
+}
+
+.two {
+  background-color: #565656;
+  color: blanchedalmond;
+}
+
 
 .color {
   display: flex; 
@@ -15,7 +40,17 @@
   width: 60px;
   height: 60px;
   border: 1px solid black;
-  margin: 5px;
+  margin: 10px;
   justify-content: center;
   align-items: center;
 }
+
+.pieces {
+  display: flex;
+  justify-content: center;
+}
+
+.piece {
+  height: 50px;
+  width: 50px;
+} 

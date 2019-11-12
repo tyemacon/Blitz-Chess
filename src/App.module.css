@@ -1,9 +1,10 @@
 
 .game {
   display: grid;
+  margin: 0 5%;
   min-width: 1250px;
   grid-template-rows: 100px 750px 100px;
-  grid-template-columns: 25% 50% 25%;
+  grid-template-columns: 300px 750px 300px;
   grid-template-areas: 
     ". title ."
     "playerone board playertwo"
@@ -18,20 +19,16 @@
 .board {
   display: flex;
   grid-area: board;
-  max-width: 100%;
-  max-height: 100%;
+  min-width: 750px;
+  min-height: 750px;
   box-sizing: border-box;
   align-items: center;
 }
 
-.playerone {
-  grid-area: playerone;
+.player {
   padding: 10px;
-}
-
-.playertwo {
-  grid-area: playertwo;
-  padding: 10px;
+  min-width: 300px;
+  box-sizing: border-box;
 }
 
 .footer {

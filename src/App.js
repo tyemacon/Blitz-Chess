@@ -16,8 +16,20 @@ export default class App extends React.Component {
     this.state = {
       board: initializeBoard(),
       player: 'ONE',
-      playerOneCaptures: [],
-      playerTwoCaptures: [],
+      playerOneCaptures: {
+        1: [],
+        3: [],
+        3.5: [],
+        5: [],
+        9: []
+      },
+      playerTwoCaptures: {
+        1: [],
+        3: [],
+        3.5: [],
+        5: [],
+        9: []
+      },
       playerOneKing: [0,4],
       playerTwoKing: [7,4],
       playerOneScore: 0,
@@ -136,14 +148,18 @@ export default class App extends React.Component {
   }
   capturePiece(x, y) {
     if(this.state.player === 'ONE'){
+      let cloneOne = cloneDeep(this.state.playerOneCaptures);
+      cloneOne[this.state.board[x][y].piece.value].push(this.state.board[x][y].piece)
       this.setState({
         playerOneScore: Math.floor(this.state.playerOneScore + this.state.board[x][y].piece.value),
-        playerOneCaptures: [...this.state.playerOneCaptures, this.state.board[x][y].piece]
+        playerOneCaptures: cloneOne
       })
     }else{
+      let cloneTwo = cloneDeep(this.state.playerTwoCaptures);
+      cloneTwo[this.state.board[x][y].piece.value].push(this.state.board[x][y].piece)
       this.setState({
         playerTwoScore: Math.floor(this.state.playerTwoScore + this.state.board[x][y].piece.value),
-        playerTwoCaptures: [...this.state.playerTwoCaptures, this.state.board[x][y].piece]
+        playerTwoCaptures: cloneTwo
       })
     }
   }
@@ -177,7 +193,7 @@ export default class App extends React.Component {
         <div className={styles.title}>
           <h1>Chess</h1>
         </div>
-        <div className={styles.playerone}>
+        <div className={styles.player} style={{gridArea: 'playerone'}}>
           <PlayerCard player={'ONE'} 
           score={this.state.playerOneScore- this.state.playerTwoScore}
           captures={this.state.playerOneCaptures}
@@ -189,7 +205,7 @@ export default class App extends React.Component {
             onSelect={this.onSelect}
           />
         </div>
-        <div className={styles.playertwo}>
+        <div className={styles.player} style={{gridArea: 'playertwo'}}>
           <PlayerCard player={'TWO'} 
           score={this.state.playerTwoScore - this.state.playerOneScore}
           captures={this.state.playerTwoCaptures}

@@ -6,6 +6,7 @@ export default class Piece {
       backgroundRepeat: 'no-repeat',
       backgroundPosition: 'center',
       backgroundSize: 'cover',
+      zIndex: '5',
       cursor: 'pointer',
     }
     this.selected = false;
