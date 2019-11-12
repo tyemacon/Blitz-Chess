@@ -5,7 +5,7 @@ const PlayerCard = ({ player, score, captures }) => {
   // for readability let's take out the 84 conditionals
   if(true){
     return (
-      <div className={styles.playercard}>
+      <div className={[styles.playercard, player === 'ONE' ? styles.cardone : styles.cardtwo].join(' ')}>
         <div className={styles.card}>
           <div className={[styles.color, player === 'ONE' ? styles.one : styles.two].join(' ')}>
             {score < 0 && score}

@@ -1,6 +1,7 @@
 .playercard {
   display: grid;
-  width: minmax(200px, 100%);
+  width:400px;
+  height: 100%;
   grid-template-rows: repeat(6, 1fr);
   grid-template-areas:
     "player"
@@ -9,6 +10,7 @@
     "bishops"
     "rooks"
     "queens";
+  border: 1px solid black;
 }
 
 .card{

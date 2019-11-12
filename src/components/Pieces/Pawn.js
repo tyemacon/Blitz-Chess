@@ -8,7 +8,7 @@ export default class Pawn extends Piece {
   }
 
   // return an array of available spaces
-  availableSpaces(x, y, board, player){
+  availableSpaces(x, y, board, player, history){
     let availableSpaces = [];
     let pawnMoves = []
     if(this.player === 'ONE'){
@@ -28,6 +28,28 @@ export default class Pawn extends Piece {
         if(board[x + 1][y - 1].piece){
           if(board[x + 1][y - 1].piece.player !== player){
             availableSpaces.push([x + 1, y - 1])
+          }
+        }
+      }
+      // Check for En Passant :(
+      if(x === 5){
+        let moves = history.length - 1;
+        let moveFrom = history[moves][0];
+        let moveTo = history[moves][1];
+        if(y === 0){
+          if(moveFrom[6][1].piece && moveTo[4][1]){
+            availableSpaces.push([6, y + 1])
+          }
+        }else if(y === 7){
+          if(moveFrom[6][6].piece && moveTo[4][6]){
+            availableSpaces.push([6, y - 1])
+          }
+        }else{
+          if(moveFrom[6][y + 1].piece && moveTo[4][y + 1].piece){
+            availableSpaces.push([6, y + 1])
+          }
+          if(moveFrom[6][y - 1].piece && moveTo[4][y - 1].piece){
+            availableSpaces.push([6, y - 1])
           }
         }
       }
@@ -51,7 +73,30 @@ export default class Pawn extends Piece {
           }
         }
       }
+      // Check for En Passant :(
+      if(x === 2){
+        let moves = history.length - 1;
+        let moveFrom = history[moves][0];
+        let moveTo = history[moves][1];
+        if(y === 0){
+          if(moveFrom[1][1].piece && moveTo[3][1]){
+            availableSpaces.push([1, y + 1])
+          }
+        }else if(y === 7){
+          if(moveFrom[1][6].piece && moveTo[3][6]){
+            availableSpaces.push([1, y - 1])
+          }
+        }else{
+          if(moveFrom[1][y + 1].piece && moveTo[3][y + 1].piece){
+            availableSpaces.push([1, y + 1])
+          }
+          if(moveFrom[1][y - 1].piece && moveTo[3][y - 1].piece){
+            availableSpaces.push([1, y - 1])
+          }    
+        }
+      }
     }
+    // normal forward directions
     pawnMoves.forEach((dir) => {
       if(this.isValidTile(x + dir[0], y + dir[1])){
         if(!board[x + dir[0]][y + dir[1]].piece){
@@ -59,6 +104,8 @@ export default class Pawn extends Piece {
         }
       }
     })
+   
+
     return availableSpaces;
   }
 

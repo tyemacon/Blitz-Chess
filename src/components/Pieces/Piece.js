@@ -11,6 +11,7 @@ export default class Piece {
     }
     this.selected = false;
     this.value = value;
+    this.moved = false;
   }
 
   isValidTile(x, y){

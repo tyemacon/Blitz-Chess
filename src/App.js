@@ -36,6 +36,7 @@ export default class App extends React.Component {
       playerTwoScore: 0,
       selectedX: null,
       selectedY: null,
+      history: [],
       path: [],
       inCheck: false,
       selfCheck: false,
@@ -69,12 +70,15 @@ export default class App extends React.Component {
   generatePaths(x, y){
     let selectedPiece = this.state.board[x][y].piece;
     const boardClone = cloneDeep(this.state.board);
-    const availableSpaces = selectedPiece.availableSpaces(x, y, this.state.board, this.state.player);
+    const availableSpaces = selectedPiece.availableSpaces(x, y, this.state.board, this.state.player, this.state.history);
+    console.log(availableSpaces)
     let path = [];
     availableSpaces.forEach((coord) => {
         boardClone[coord[0]][coord[1]].selected = true;
         path.push(`${coord[0]}${coord[1]}`);
     })
+    // TODO! CROSS REFERENCE AVAILABLE PATHS WITH CHECKS AND DELETE, 
+    // ALSO COMPLETES CHECKMATE STATE
     this.setState({
       selectedX: x,
       selectedY: y,
@@ -101,6 +105,7 @@ export default class App extends React.Component {
     let selectedPiece = boardClone[this.state.selectedX][this.state.selectedY].piece;
     boardClone[this.state.selectedX][this.state.selectedY].piece = null;
     boardClone[x][y].piece = selectedPiece;
+    boardClone[x][y].piece.moved = true;
     if(this.checkSelfChecks(x, y, boardClone, this.state.player)){
       this.setState({
         selfCheck: true
@@ -126,6 +131,8 @@ export default class App extends React.Component {
     }else if(pTwoKing[0] === this.state.selectedX && pTwoKing[1] === this.state.selectedY){
       pTwoKing = [x, y];
     }
+    let moveFrom = this.state.board;
+    let moveTo = boardClone;
     this.setState({
       selectedX: null,
       selectedY: null,
@@ -133,8 +140,10 @@ export default class App extends React.Component {
       playerOneKing: pOneKing,
       playerTwoKing: pTwoKing,
       inCheck: false,
+      history: [...this.state.history, [moveFrom, moveTo]],
       path: []
     }, () => {
+      console.log(this.state.history);
       if(this.checkSelfChecks(x, y, this.state.board, this.state.player === 'ONE' ? 'TWO' : 'ONE')){
         this.setState({
           inCheck: true
