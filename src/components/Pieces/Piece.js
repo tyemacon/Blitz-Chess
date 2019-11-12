@@ -1,5 +1,5 @@
 export default class Piece {
-  constructor(player, url){
+  constructor(player,value, url){
     this.player = player;
     this.style = {
       backgroundImage: `url(${url})`,
@@ -9,6 +9,7 @@ export default class Piece {
       cursor: 'pointer',
     }
     this.selected = false;
+    this.value = value;
   }
 
   isValidTile(x, y){

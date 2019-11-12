@@ -3,7 +3,7 @@ import images from '../piece-images';
 
 export default class Bishop extends Piece {
   constructor(player, x, y){
-    super(player, (player === 'ONE' ? images.bishop.white : images.bishop.black))
+    super(player, 3, (player === 'ONE' ? images.bishop.white : images.bishop.black))
     this.x = x;
     this.y = y;
     this.availableSpaces = this.availableSpaces.bind(this)
@@ -19,6 +19,7 @@ export default class Bishop extends Piece {
         availableSpaces.push([row,col])
       }else if(board[row][col].piece.player !== player){
         availableSpaces.push([row,col])
+        break;
       }else{
         break;
       }
@@ -33,6 +34,7 @@ export default class Bishop extends Piece {
         availableSpaces.push([row,col])
       }else if(board[row][col].piece.player !== player){
         availableSpaces.push([row,col])
+        break;
       }else{
         break;
       }
@@ -47,6 +49,7 @@ export default class Bishop extends Piece {
         availableSpaces.push([row,col])
       }else if(board[row][col].piece.player !== player){
         availableSpaces.push([row,col])
+        break;
       }else{
         break;
       }
@@ -60,7 +63,8 @@ export default class Bishop extends Piece {
       if(!board[row][col].piece){
         availableSpaces.push([row,col])
       }else if(board[row][col].piece.player !== player){
-          availableSpaces.push([row,col])
+        availableSpaces.push([row,col])
+        break;
       }else{
         break;
       }

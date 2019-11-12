@@ -6,7 +6,7 @@
   grid-template-areas: 
     ". title ."
     "playerone board playertwo"
-    "footer footer footer";
+    ". footer .";
   justify-items: center;
 }
 
@@ -32,4 +32,8 @@
 .playertwo {
   grid-area: playertwo;
   padding: 10px;
+}
+
+.footer {
+  grid-area: footer
 }

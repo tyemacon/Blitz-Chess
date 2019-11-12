@@ -3,7 +3,7 @@ import styles from './Board.module.css';
 import Square from './Square';
 
 const Board = ({ board, onSelect }) => {
-  console.log(board)
+  // console.log(board)
   return (
     <div className={styles.board}>
       {board.map((row, i) => {
@@ -14,7 +14,8 @@ const Board = ({ board, onSelect }) => {
           piece={square.piece}
           selected={square.selected}
           onSelect={onSelect}
-          />)
+          />
+        )
       })}
     </div>
   )
