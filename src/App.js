@@ -3,13 +3,13 @@ import { cloneDeep } from 'lodash'
 import styles from './App.module.css';
 
 import PlayerCard from './components/PlayerCard';
-import Board from './components/Board/Board'
-import Pawn from './components/Pieces/Pawn/Pawn';
-import Rook from './components/Pieces/Rook/Rook';
-import Knight from './components/Pieces/Knight/Knight';
-import Bishop from './components/Pieces/Bishop/Bishop';
-import King from './components/Pieces/King/King';
-import Queen from './components/Pieces/Queen/Queen';
+import Board from './components/Board/Board';
+import Pawn from './components/Pieces/Pawn';
+import Rook from './components/Pieces/Rook';
+import Knight from './components/Pieces/Knight';
+import Bishop from './components/Pieces/Bishop';
+import King from './components/Pieces/King';
+import Queen from './components/Pieces/Queen';
 export default class App extends React.Component {
   constructor() {
     super()
@@ -38,12 +38,12 @@ export default class App extends React.Component {
       this.movePiece(x, y);
     }else if((this.state.selectedX === x && this.state.selectedY === y) || !this.state.board[x][y].piece){
       // CLEAR PATHS
-      if(this.state.selectedX){
+      if(!isNaN(this.state.selectedX)){
         this.clearPaths();
       }
     }else if(this.state.board[x][y].piece.player === this.state.player){
       // GENERATE MOVE PATHS
-      if(this.state.selectedX){
+      if(!isNaN(this.state.selectedX)){
         // CLEAR PATHS IF CLICKED ON DIFFERENT PIECES
         this.clearPaths(() => this.generatePaths(x, y))
       }else{

@@ -1,23 +1,21 @@
-.squarewhite {
+.square {
   display: flex;
-  width: 95px;
-  height: 95px;
+  width: 90px;
+  height: 90px;
   justify-content: center;
   align-items: center;
-  background-color: blanchedalmond;
   box-sizing: border-box;
 }
 
-.squareblack {
-  display: flex;
-  width: 95px;
-  height: 95px;
-  justify-content: center;
-  align-items: center;
+.white{
+  background-color: blanchedalmond;
+}
+
+.black {
   background-color: #565656;
-  box-sizing: border-box;
 }
 
 .selected {
-  border: 5px solid green;
+  border: 5px solid #05B9A7;
+  opacity: 0.7;
 }

@@ -1,5 +1,5 @@
-import Piece from '../Piece';
-import images from '../piece-images';
+import Piece from './Piece';
+import images from './piece-images';
 
 
 

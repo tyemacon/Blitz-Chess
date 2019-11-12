@@ -1,8 +1,9 @@
 
 .game {
   display: grid;
-  grid-template-rows: 50px 800px 50px;
-  grid-template-columns: 1fr 50% 1fr;
+  min-width: 1250px;
+  grid-template-rows: 100px 750px 100px;
+  grid-template-columns: 25% 50% 25%;
   grid-template-areas: 
     ". title ."
     "playerone board playertwo"
@@ -21,7 +22,6 @@
   max-height: 100%;
   box-sizing: border-box;
   align-items: center;
-  justify-content: center;
 }
 
 .playerone {
