@@ -42,15 +42,12 @@ export default class King extends Piece {
     this.bishopDirs.forEach((dir) => {
       let row = x + dir[0];
       let col = y + dir[1];
-      row += dir[0];
-      col += dir[1];
       while(this.isValidTile(row, col)){
         if(board[row][col].piece){
           if(board[row][col].piece.player !== player && board[row][col].piece.value === 3){
             checks = 1;
-          }else{
-            break;
           }
+          break;
         }
         row += dir[0];
         col += dir[1];
@@ -74,9 +71,8 @@ export default class King extends Piece {
         if(board[row][col].piece){
           if(board[row][col].piece.player !== player && board[row][col].piece.value === 5){
             checks = 1;
-          }else{
-            break;
           }
+          break;
         }
         row += dir[0];
         col += dir[1];
@@ -90,9 +86,8 @@ export default class King extends Piece {
         if(board[row][col].piece){
           if(board[row][col].piece.player !== player && board[row][col].piece.value === 9){
             checks = 1;
-          }else{
-            break
           }
+          break;
         }
         row += dir[0];
         col += dir[1];
