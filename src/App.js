@@ -198,8 +198,8 @@ export default class App extends React.Component {
         <div className={styles.footer}>
           <h2>
             {`Player ${this.state.player}'s turn `}
-            {this.state.inCheck && "You're in check! "}
-            {this.state.selfCheck && `Can't do that..`}
+            {this.state.inCheck && "-You're in check! "}
+            {this.state.selfCheck && `-Can't do that..`}
           </h2>
         </div>
       </div>
