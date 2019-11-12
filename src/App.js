@@ -71,7 +71,6 @@ export default class App extends React.Component {
     let selectedPiece = this.state.board[x][y].piece;
     const boardClone = cloneDeep(this.state.board);
     const availableSpaces = selectedPiece.availableSpaces(x, y, this.state.board, this.state.player, this.state.history);
-    console.log(availableSpaces)
     let path = [];
     availableSpaces.forEach((coord) => {
         boardClone[coord[0]][coord[1]].selected = true;
@@ -118,6 +117,8 @@ export default class App extends React.Component {
     if(this.state.board[x][y].piece){
       // CAPTURE PIECE
       this.capturePiece(x, y);
+    }else if(true){
+      // capture the en passant if possible
     }
     this.state.path.forEach((coord) => {
       let row = Number(coord[0])
@@ -143,7 +144,6 @@ export default class App extends React.Component {
       history: [...this.state.history, [moveFrom, moveTo]],
       path: []
     }, () => {
-      console.log(this.state.history);
       if(this.checkSelfChecks(x, y, this.state.board, this.state.player === 'ONE' ? 'TWO' : 'ONE')){
         this.setState({
           inCheck: true
@@ -194,7 +194,7 @@ export default class App extends React.Component {
         check = board[kingTwoRow][kingTwoCol].piece.check(kingTwoRow, kingTwoCol, board, player);
       }
     }
-    return check !== '' ? true : false;
+    return check;
   }
   render() {
     return (
