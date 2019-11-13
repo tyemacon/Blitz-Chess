@@ -1,4 +1,4 @@
-### Chess
+# Chess
 
 # <p align="center">
   !TODO upload image
@@ -53,7 +53,23 @@ Fun for all ages!
 
 
 ### Technical Challenges/Research
-- Chess was built in less than 48 hours
+- *Chess* MVP was built in less than 48 hours
 - Special moves like *En Passants* and *Castling* required unique logic that deters other standard moves
 - Check and Checkmate are dependant on more than the vector created by the most recently used piece
 
+# Client Deliverables
+The following user stories  were developred to track deliverables and meet the expectations of the client:
+
+#### User Stories
+* As a user I should be able to input my own username to play with
+* As a user I should be able to move pieces to all of their allowed locations
+* As a user I should see when I am in check or have checked my opponent
+* As a user I should be allowed to move out of check if possible
+* As a user I should see I have won when checkmating my opponent
+* As a user I should be able to reset the game
+
+## Minimum Viable Product 
+The MVP of the app is a playable chess game by two players
+
+### How the App Works:
+[Gameplay]("URL TO GIF")
