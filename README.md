@@ -1,7 +1,7 @@
 # Chess
 
 <p>
-<img width="600" height="400" src="https://blitz-chess.s3.us-east-2.amazonaws.com/title-screen.PNG">
+<img width="800" height="500" src="https://blitz-chess.s3.us-east-2.amazonaws.com/title-screen.PNG">
 </p>
 
 ### About
