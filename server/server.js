@@ -12,9 +12,9 @@ app.use(express.static(path.join(__dirname, '../build')));
 
 let port = 3000;
 
-app.get('/', (req, res) => {
-  res.send('hey there')
-})
+// app.get('/', (req, res) => {
+//   res.send('hey there')
+// })
 
 // app.get('/getAll', (req, res) => {
 //   console.log('getting all...')
