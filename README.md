@@ -71,4 +71,6 @@ The following user stories  were developred to track deliverables and meet the e
 The MVP of the app is a playable chess game by two players
 
 ### How the App Works:
-[Gameplay]("URL TO GIF")
+![GIF OF SETUP](https://blitz-chess.s3.us-east-2.amazonaws.com/username-and-reset.gif)
+![GIF OF CASTLING](https://blitz-chess.s3.us-east-2.amazonaws.com/castling.gif)
+![GIF OF CHECKMATE](https://blitz-chess.s3.us-east-2.amazonaws.com/check-and-mate.gif)
