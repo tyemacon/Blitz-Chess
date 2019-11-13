@@ -2,7 +2,7 @@
 
 # <p align="center">
   !TODO upload image
-  <img width="800" height="500" src="title-screen.png">
+  <img width="800" height="500" src="https://blitz-chess.s3.us-east-2.amazonaws.com/title-screen.PNG">
   </p>
 
 ### About
