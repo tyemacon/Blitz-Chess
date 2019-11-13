@@ -349,7 +349,11 @@ export default class App extends React.Component {
             :
             <h2>
               Check Mate!
+<<<<<<< Updated upstream
               {` Player ${this.state.player === 'ONE' ? 'TWO' : 'ONE'} Wins!`}
+=======
+              {` ${this.state.player === 'TWO' ? this.state.playerOne : this.state.playerTwo} Wins!`}
+>>>>>>> Stashed changes
             </h2>
           }
         </div>

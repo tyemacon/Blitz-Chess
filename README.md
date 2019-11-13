@@ -1,12 +1,15 @@
-### Classic Chess
+### Chess
+
+# <p align="center>
+  <img width="800" height="500" src="title-screen.png">
+  </p>
+
+### About
 
 A classic Chess game for two players
 
 Fun for all ages! 
 
-
-### Heading
-Name the product in a way the reader (i.e. your target customers) will understand.
 
 ### Sub-Heading
 Describe who the market for the product is and what benefit they get. One sentence only underneath the title.
