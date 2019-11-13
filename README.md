@@ -1,10 +1,8 @@
 # Chess
 
-# <div style-{{display:'flex', justify-content: 'center}}>
-  <p>
-  <img width="600" height="400" src="https://blitz-chess.s3.us-east-2.amazonaws.com/title-screen.PNG">
-  </p>
-  </div>
+<p>
+<img width="600" height="400" src="https://blitz-chess.s3.us-east-2.amazonaws.com/title-screen.PNG">
+</p>
 
 ### About
 
