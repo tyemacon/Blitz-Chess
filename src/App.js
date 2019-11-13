@@ -143,12 +143,10 @@ export default class App extends React.Component {
     boardClone[this.state.selectedX][this.state.selectedY].piece = null;
     boardClone[x][y].piece = selectedPiece;
     boardClone[x][y].piece.moved = true;
-
+    // ^^ Castling ROOKS have not been moved from this ^^
     if(this.state.board[x][y].piece){
       this.capturePiece(x, y, this.state.board);
     }else if(this.state.passants.length){
-      // capture the en passant if possible
-      // debugger;
       for(let i = 0; i < this.state.passants.length; i++){
         if(y === this.state.passants[i][1]){
           if(this.state.player === 'ONE'){
@@ -163,7 +161,40 @@ export default class App extends React.Component {
         }
       }
     }else if(this.state.castles.length){
-      // deal with castling
+      debugger;
+      for(let i = 0; i < this.state.castles.length; i++){
+        if(x === this.state.castles[i][0]){
+          if(this.state.player === 'ONE'){
+            if(this.state.castles[i][1] > y){
+              // castling right
+              let rook = boardClone[0][7].piece;
+              boardClone[0][7].piece = null;
+              boardClone[0][5].piece = rook;
+              boardClone[0][5].piece.moved = true;
+            }else{
+              // castling left
+              let rook = boardClone[0][0].piece;
+              boardClone[0][0].piece = null;
+              boardClone[0][3].piece = rook;
+              boardClone[0][3].piece.moved = true;
+            }
+          }else{
+            if(this.state.castles[i][1] > y){
+              // castling right
+              let rook = boardClone[7][7].piece;
+              boardClone[7][7].piece = null;
+              boardClone[7][5].piece = rook;
+              boardClone[7][5].piece.moved = true;
+            }else{
+              // castling left
+              let rook = boardClone[7][0].piece;
+              boardClone[7][0].piece = null;
+              boardClone[7][3].piece = rook;
+              boardClone[7][3].piece.moved = true;
+            }
+          }
+        }
+      }
     }
 
     this.state.path.forEach((coord) => {
