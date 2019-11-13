@@ -44,6 +44,7 @@ export default class App extends React.Component {
       checkMate: false,
     }
     this.onSelect = this.onSelect.bind(this);
+    this.resetGame = this.resetGame.bind(this);
   }
   // manage all logic delegated to each piece
   onSelect(x, y){
@@ -65,13 +66,10 @@ export default class App extends React.Component {
       }
     }
   }
-
   generatePaths(x, y, checking){
     let selectedPiece = this.state.board[x][y].piece;
     const boardClone = cloneDeep(this.state.board);
     const availableSpaces = selectedPiece.availableSpaces(x, y, this.state.board, this.state.player, this.state.history);
-    // TODO! CROSS REFERENCE AVAILABLE PATHS WITH CHECKS AND DELETE, 
-    // ALSO COMPLETES CHECKMATE STATE
     let path = [];
     let passants = [];
     let castles = [];
@@ -114,10 +112,8 @@ export default class App extends React.Component {
           }
         }
     })
-    if(checking){
-      console.log('checking for mate')
-      return path
-    }
+    // Don't set the state if this is a checkmate check
+    if(checking){ return path }
     this.setState({
       selectedX: x,
       selectedY: y,
@@ -154,12 +150,12 @@ export default class App extends React.Component {
       for(let i = 0; i < this.state.passants.length; i++){
         if(y === this.state.passants[i][1]){
           if(this.state.player === 'ONE'){
-            this.capturePiece(this.state.passants[i][0] - 2, this.state.passants[i][1], boardClone);
-            boardClone[this.state.passants[i][0] - 2][this.state.passants[i][1]].piece = null;
+            this.capturePiece(this.state.passants[i][0] - 1, this.state.passants[i][1], boardClone);
+            boardClone[this.state.passants[i][0] - 1][this.state.passants[i][1]].piece = null;
             break;
           }else{
-            this.capturePiece(this.state.passants[i][0] + 2, this.state.passants[i][1], boardClone);
-            boardClone[this.state.passants[i][0] + 2][this.state.passants[i][1]].piece = null;
+            this.capturePiece(this.state.passants[i][0] + 1, this.state.passants[i][1], boardClone);
+            boardClone[this.state.passants[i][0] + 1][this.state.passants[i][1]].piece = null;
             break;
           }
         }
@@ -241,8 +237,9 @@ export default class App extends React.Component {
         player: this.state.player === 'ONE' ? 'TWO' : 'ONE'
       }, () => {
         if(this.state.inCheck){
-          checkMate = this.checkMate();
-          console.log(checkMate);
+          this.setState({
+            checkMate: this.checkMate()
+          }) 
         }
       })
     })
@@ -270,7 +267,6 @@ export default class App extends React.Component {
   }
   checkMate(){
     let checkMate = true;
-    debugger;
     this.state.board.forEach((row) => {
       row.forEach((square) => {
         if(square.piece){
@@ -285,11 +281,44 @@ export default class App extends React.Component {
     })
     return checkMate;
   }
+  resetGame(){
+    this.setState({
+      board: initializeBoard(),
+      player: 'ONE',
+      playerOneCaptures: {
+        1: [],
+        3: [],
+        3.5: [],
+        5: [],
+        9: []
+      },
+      playerTwoCaptures: {
+        1: [],
+        3: [],
+        3.5: [],
+        5: [],
+        9: []
+      },
+      playerOneKing: [0,4],
+      playerTwoKing: [7,4],
+      playerOneScore: 0,
+      playerTwoScore: 0,
+      selectedX: null,
+      selectedY: null,
+      history: [],
+      path: [],
+      passants: [],
+      castles: [],
+      inCheck: false,
+      checkMate: false,
+    })
+  }
   render() {
     return (
       <div className={styles.game}>
         <div className={styles.title}>
           <h1>Chess</h1>
+          <button onClick={this.resetGame}>Reset Game</button>
         </div>
         <div className={styles.player} style={{gridArea: 'playerone'}}>
           <PlayerCard player={'ONE'} 
@@ -310,10 +339,17 @@ export default class App extends React.Component {
           />
         </div>
         <div className={styles.footer}>
-          <h2>
-            {`Player ${this.state.player}'s turn `}
-            {this.state.inCheck && "- You're in check! "}
-          </h2>
+          {!this.state.checkMate ?
+            <h2>
+              {`Player ${this.state.player}'s turn `}
+              {this.state.inCheck && "- You're in check! "}
+            </h2> 
+            :
+            <h2>
+              Check Mate!
+              {` Player ${this.state.player === 'ONE' ? 'TWO' : 'ONE'} Wins!`}
+            </h2>
+          }
         </div>
       </div>
     )

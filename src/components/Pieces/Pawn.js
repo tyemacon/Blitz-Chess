@@ -33,28 +33,28 @@ export default class Pawn extends Piece {
         }
       }
       // Check for En Passant :(
-      if(x === 5){
+      if(x === 4){
         let moves = history.length - 1;
         let moveFrom = history[moves][0];
         let moveTo = history[moves][1];
         if(y === 0){
           if(moveFrom[6][1].piece && moveTo[4][1]){
-            availableSpaces.push([6, y + 1])
-            availableSpaces.passants.push([6, y + 1])
+            availableSpaces.push([5, y + 1])
+            availableSpaces.passants.push([5, y + 1])
           }
         }else if(y === 7){
           if(moveFrom[6][6].piece && moveTo[4][6]){
-            availableSpaces.push([6, y - 1])
-            availableSpaces.passants.push([6, y - 1])
+            availableSpaces.push([5, y - 1])
+            availableSpaces.passants.push([5, y - 1])
           }
         }else{
           if(moveFrom[6][y + 1].piece && moveTo[4][y + 1].piece){
-            availableSpaces.push([6, y + 1])
-            availableSpaces.passants.push([6, y + 1])
+            availableSpaces.push([5, y + 1])
+            availableSpaces.passants.push([5, y + 1])
           }
           if(moveFrom[6][y - 1].piece && moveTo[4][y - 1].piece){
-            availableSpaces.push([6, y - 1])
-            availableSpaces.passants.push([6, y - 1])
+            availableSpaces.push([5, y - 1])
+            availableSpaces.passants.push([5, y - 1])
           }
         }
       }
@@ -79,25 +79,25 @@ export default class Pawn extends Piece {
         }
       }
       // Check for En Passant :(
-      if(x === 2){
+      if(x === 3){
         let moves = history.length - 1;
         let moveFrom = history[moves][0];
         let moveTo = history[moves][1];
         if(y === 0){
           if(moveFrom[1][1].piece && moveTo[3][1]){
-            availableSpaces.push([1, y + 1])
-            availableSpaces.passants.push([1, y + 1])
+            availableSpaces.push([2, y + 1])
+            availableSpaces.passants.push([2, y + 1])
           }
         }else if(y === 7){
           if(moveFrom[1][6].piece && moveTo[3][6]){
-            availableSpaces.passants.push([1, y - 1])
+            availableSpaces.passants.push([2, y - 1])
           }
         }else{
           if(moveFrom[1][y + 1].piece && moveTo[3][y + 1].piece){
-            availableSpaces.passants.push([1, y + 1])
+            availableSpaces.passants.push([2, y + 1])
           }
           if(moveFrom[1][y - 1].piece && moveTo[3][y - 1].piece){
-            availableSpaces.passants.push([1, y - 1])
+            availableSpaces.passants.push([2, y - 1])
           }    
         }
       }
