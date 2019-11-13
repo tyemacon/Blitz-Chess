@@ -161,11 +161,11 @@ export default class App extends React.Component {
         }
       }
     }else if(this.state.castles.length){
-      debugger;
+      // debugger;
       for(let i = 0; i < this.state.castles.length; i++){
         if(x === this.state.castles[i][0]){
           if(this.state.player === 'ONE'){
-            if(this.state.castles[i][1] > y){
+            if(this.state.castles[i][1] === 6){
               // castling right
               let rook = boardClone[0][7].piece;
               boardClone[0][7].piece = null;
@@ -179,7 +179,7 @@ export default class App extends React.Component {
               boardClone[0][3].piece.moved = true;
             }
           }else{
-            if(this.state.castles[i][1] > y){
+            if(this.state.castles[i][1] === 6){
               // castling right
               let rook = boardClone[7][7].piece;
               boardClone[7][7].piece = null;
