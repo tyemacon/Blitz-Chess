@@ -108,6 +108,7 @@ export default class King extends Piece {
 
   availableSpaces(x, y, board, player){
     let availableSpaces = [];
+    availableSpaces.castles = [];
     this.queenDirs.forEach((coord) => {
       if(this.isValidTile(x + coord[0], y + coord[1])){
         if(!board[x + coord[0]][y + coord[1]].piece){
@@ -136,7 +137,7 @@ export default class King extends Piece {
               })
               if(!check){
                 availableSpaces.push([0,2])
-                availableSpaces.castle = [0,2];
+                availableSpaces.castles.push([0,2]);
               }
             }
           }
@@ -154,7 +155,7 @@ export default class King extends Piece {
               })
               if(!check){
                 availableSpaces.push([0,6])
-                availableSpaces.castle = [0,6];
+                availableSpaces.castles.push([0,6]);
               }
             }
           }
@@ -173,7 +174,7 @@ export default class King extends Piece {
               })
               if(!check){
                 availableSpaces.push([7,2])
-                availableSpaces.castle = [7,2];
+                availableSpaces.castles.push([7,2]);
               }
             }
           }
@@ -191,14 +192,13 @@ export default class King extends Piece {
               })
               if(!check){
                 availableSpaces.push([7,6])
-                availableSpaces.castle = [7,6];
+                availableSpaces.castles.push([7,6]);
               }
             }
           }
         }
       }
     }
-    console.log(board);
     return availableSpaces;
   }
 }

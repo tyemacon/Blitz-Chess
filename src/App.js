@@ -38,12 +38,12 @@ export default class App extends React.Component {
       selectedY: null,
       history: [],
       path: [],
+      passants: [],
+      castles: [],
       inCheck: false,
-      selfCheck: false,
     }
     this.onSelect = this.onSelect.bind(this);
   }
-
   // manage all logic delegated to each piece
   onSelect(x, y){
     if(this.state.path.includes(`${x}${y}`)){
@@ -62,8 +62,6 @@ export default class App extends React.Component {
       }else{
         this.generatePaths(x, y)
       }
-    }else{
-      console.log('TODO')
     }
   }
 
@@ -71,19 +69,59 @@ export default class App extends React.Component {
     let selectedPiece = this.state.board[x][y].piece;
     const boardClone = cloneDeep(this.state.board);
     const availableSpaces = selectedPiece.availableSpaces(x, y, this.state.board, this.state.player, this.state.history);
-    let path = [];
-    availableSpaces.forEach((coord) => {
-        boardClone[coord[0]][coord[1]].selected = true;
-        path.push(`${coord[0]}${coord[1]}`);
-    })
     // TODO! CROSS REFERENCE AVAILABLE PATHS WITH CHECKS AND DELETE, 
     // ALSO COMPLETES CHECKMATE STATE
+    let path = [];
+    let passants = [];
+    let castles = [];
+    availableSpaces.forEach((coord) => {
+        let pathClone = cloneDeep(this.state.board);
+        pathClone[x][y].piece = null;
+        pathClone[coord[0]][coord[1]].piece = selectedPiece;
+        let check = false;
+        if(this.state.player === 'ONE'){
+          // Is the King selected?
+          if(selectedPiece.value === 0){
+            check = this.checkChecks(coord[0], coord[1], pathClone, 'ONE');
+          }else{
+            check = this.checkChecks(this.state.playerOneKing[0], this.state.playerOneKing[1], pathClone, 'ONE');
+          }
+        }else{
+          // Is the King selected?
+          if(selectedPiece.value === 0){
+            check = this.checkChecks(coord[0], coord[1], pathClone, 'TWO');
+          }else{
+            check = this.checkChecks(this.state.playerTwoKing[0], this.state.playerTwoKing[1], pathClone, 'TWO');
+          }
+        }
+        // debugger;
+        if(!check){
+          boardClone[coord[0]][coord[1]].selected = true;
+          path.push(`${coord[0]}${coord[1]}`);
+          if(availableSpaces.passants){
+            for(let i = 0; i < availableSpaces.passants.length; i++){
+              if(coord[0] === availableSpaces.passants[i][0] && coord[1] === availableSpaces.passants[i][1]){
+                passants.push([coord[0], coord[1]])
+              } 
+            }
+          }
+          if(availableSpaces.castles){
+            for(let i = 0; i < availableSpaces.castles.length; i++){
+              if(coord[0] === availableSpaces.castles[i][0] && coord[1] === availableSpaces.castles[i][1]){
+                castles.push([coord[0], coord[1]])
+              }
+            }
+          }
+        }
+    })
     this.setState({
       selectedX: x,
       selectedY: y,
       board: boardClone,
       path: path,
-    })
+      passants: passants,
+      castles: castles,
+    }, () => console.log(this.state.passants, this.state.castles))
   }
   clearPaths(callback) {
     const boardClone = cloneDeep(this.state.board);
@@ -105,21 +143,29 @@ export default class App extends React.Component {
     boardClone[this.state.selectedX][this.state.selectedY].piece = null;
     boardClone[x][y].piece = selectedPiece;
     boardClone[x][y].piece.moved = true;
-    if(this.checkSelfChecks(x, y, boardClone, this.state.player)){
-      this.setState({
-        selfCheck: true
-      }, () => setTimeout(() => {
-        this.setState({
-        selfCheck: false
-      })}, 2000))
-      return;
-    }
+
     if(this.state.board[x][y].piece){
-      // CAPTURE PIECE
-      this.capturePiece(x, y);
-    }else if(true){
+      this.capturePiece(x, y, this.state.board);
+    }else if(this.state.passants.length){
       // capture the en passant if possible
+      // debugger;
+      for(let i = 0; i < this.state.passants.length; i++){
+        if(y === this.state.passants[i][1]){
+          if(this.state.player === 'ONE'){
+            this.capturePiece(this.state.passants[i][0] - 2, this.state.passants[i][1], boardClone);
+            boardClone[this.state.passants[i][0] - 2][this.state.passants[i][1]].piece = null;
+            break;
+          }else{
+            this.capturePiece(this.state.passants[i][0] + 2, this.state.passants[i][1], boardClone);
+            boardClone[this.state.passants[i][0] + 2][this.state.passants[i][1]].piece = null;
+            break;
+          }
+        }
+      }
+    }else if(this.state.castles.length){
+      // deal with castling
     }
+
     this.state.path.forEach((coord) => {
       let row = Number(coord[0])
       let col = Number(coord[1])
@@ -144,57 +190,43 @@ export default class App extends React.Component {
       history: [...this.state.history, [moveFrom, moveTo]],
       path: []
     }, () => {
-      if(this.checkSelfChecks(x, y, this.state.board, this.state.player === 'ONE' ? 'TWO' : 'ONE')){
-        this.setState({
-          inCheck: true
-        })
+      let kingX, kingY, player, checked;
+      if(this.state.player === 'ONE'){
+        kingX = this.state.playerTwoKing[0];
+        kingY = this.state.playerTwoKing[1];
+        player = 'TWO'
+      }else{
+        kingX = this.state.playerOneKing[0];
+        kingY = this.state.playerOneKing[1];
+        player = 'ONE'
       }
+      checked = this.checkChecks(kingX, kingY, this.state.board, player)
       this.setState({
-        player: this.state.player === 'ONE' ? 'TWO' : 'ONE'
+          inCheck: checked,
+          player: this.state.player === 'ONE' ? 'TWO' : 'ONE'
       })
- 
     })
   }
-  capturePiece(x, y) {
+  capturePiece(x, y, board) {
     if(this.state.player === 'ONE'){
       let cloneOne = cloneDeep(this.state.playerOneCaptures);
-      cloneOne[this.state.board[x][y].piece.value].push(this.state.board[x][y].piece)
+      cloneOne[board[x][y].piece.value].push(board[x][y].piece)
       this.setState({
-        playerOneScore: Math.floor(this.state.playerOneScore + this.state.board[x][y].piece.value),
+        playerOneScore: Math.floor(this.state.playerOneScore + board[x][y].piece.value),
         playerOneCaptures: cloneOne
       })
     }else{
       let cloneTwo = cloneDeep(this.state.playerTwoCaptures);
-      cloneTwo[this.state.board[x][y].piece.value].push(this.state.board[x][y].piece)
+      cloneTwo[board[x][y].piece.value].push(board[x][y].piece)
       this.setState({
-        playerTwoScore: Math.floor(this.state.playerTwoScore + this.state.board[x][y].piece.value),
+        playerTwoScore: Math.floor(this.state.playerTwoScore + board[x][y].piece.value),
         playerTwoCaptures: cloneTwo
       })
     }
   }
-  // returns 1 if player in check
-  checkSelfChecks(x, y, board, player){
-    let check;
-    if(player === 'ONE'){
-      let kingOneRow = this.state.playerOneKing[0];
-      let kingOneCol = this.state.playerOneKing[1];
-      // THE KING IS BEING MOVED
-      if(this.state.selectedX === kingOneRow && this.state.selectedY === kingOneCol){
-        check = board[x][y].piece.check(x, y, board, player);
-      }else{
-        check = board[kingOneRow][kingOneCol].piece.check(kingOneRow, kingOneCol, board, player);
-      }
-    }else{
-      let kingTwoRow = this.state.playerTwoKing[0];
-      let kingTwoCol = this.state.playerTwoKing[1];
-      // THE KING IS BEING MOVED
-      if(this.state.selectedX === kingTwoRow && this.state.selectedY === kingTwoCol){
-        check = board[x][y].piece.check(x, y, board, player);
-      }else{
-        check = board[kingTwoRow][kingTwoCol].piece.check(kingTwoRow, kingTwoCol, board, player);
-      }
-    }
-    return check;
+  // Return true if player in check
+  checkChecks(kingX, kingY, board, player){
+    return board[kingX][kingY].piece.check(kingX, kingY, board, player);
   }
   render() {
     return (
@@ -223,8 +255,7 @@ export default class App extends React.Component {
         <div className={styles.footer}>
           <h2>
             {`Player ${this.state.player}'s turn `}
-            {this.state.inCheck && "-You're in check! "}
-            {this.state.selfCheck && `-Can't do that..`}
+            {this.state.inCheck && "- You're in check! "}
           </h2>
         </div>
       </div>
