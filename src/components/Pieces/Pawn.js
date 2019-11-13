@@ -110,9 +110,6 @@ export default class Pawn extends Piece {
         }
       }
     })
-   
-
     return availableSpaces;
   }
-
 }

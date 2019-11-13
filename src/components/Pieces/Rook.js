@@ -1,14 +1,11 @@
 import Piece from './Piece';
 import images from './piece-images';
 
-
-
 export default class Rook extends Piece {
   constructor(player){
     super(player, 5, (player === 'ONE' ? images.rook.white : images.rook.black))
     this.availableSpaces = this.availableSpaces.bind(this)
   }
-
 
   availableSpaces(x, y, board, player){
     let availableSpaces = [];

@@ -1,5 +1,4 @@
 import React from 'react';
-import axios from 'axios';
 import { cloneDeep } from 'lodash'
 import styles from './App.module.css';
 
@@ -315,17 +314,8 @@ export default class App extends React.Component {
       checkMate: false,
     })
   }
-  componentDidMount(){
-    axios.get('http://localhost:3001/getAll')
-      .then((data) => {
-        console.log('no error though', data)
-      })
-      .catch((err) => {
-        console.log(err);
-      })
-  }
+
   render() {
-    
     return (
       <div className={styles.game}>
         <div className={styles.title}>
