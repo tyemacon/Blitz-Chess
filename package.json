@@ -12,12 +12,11 @@
     "react-dom": "^16.11.0",
     "react-scripts": "3.2.0"
   },
-  "proxy": "http://localhost:8080",
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "server": "nodemon server/server.js"
+    "server": "node server/server.js"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -33,5 +32,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "nodemon": "^1.19.4"
   }
 }

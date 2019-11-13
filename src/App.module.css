@@ -6,7 +6,7 @@
   grid-template-rows: 100px 750px 100px;
   grid-template-columns: 400px 750px 400px;
   grid-template-areas: 
-    ". title ."
+    "inputone title inputtwo"
     "playerone board playertwo"
     ". footer .";
   justify-items: center;
@@ -14,6 +14,14 @@
 
 .title {
   grid-area: title;
+}
+
+.input{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-size: 30px;
 }
 
 .board {

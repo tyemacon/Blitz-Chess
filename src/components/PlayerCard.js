@@ -1,7 +1,6 @@
 import React from 'react';
 import styles from './PlayerCard.module.css';
-
-const PlayerCard = ({ player, score, captures }) => {
+const PlayerCard = ({ player, score, captures}) => {
   // for readability let's take out the 84 conditionals
   return (
     <div className={[styles.playercard, player === 'ONE' ? styles.cardone : styles.cardtwo].join(' ')}>
@@ -11,7 +10,7 @@ const PlayerCard = ({ player, score, captures }) => {
           {score === 0 && score}
           {score > 0 && `+${score}`}
         </div>
-        <h2 className={styles.player}>{`Player ${player}`}</h2>
+        <h2 className={styles.player}>{`${player}`}</h2>
       </div>
       <div className={styles.pieces} style={{gridArea: 'pawns'}}>
         {captures[1].map((piece, i) => {
