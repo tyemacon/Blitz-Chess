@@ -41,6 +41,7 @@ export default class App extends React.Component {
       passants: [],
       castles: [],
       inCheck: false,
+      checkMate: false,
     }
     this.onSelect = this.onSelect.bind(this);
   }
@@ -65,7 +66,7 @@ export default class App extends React.Component {
     }
   }
 
-  generatePaths(x, y){
+  generatePaths(x, y, checking){
     let selectedPiece = this.state.board[x][y].piece;
     const boardClone = cloneDeep(this.state.board);
     const availableSpaces = selectedPiece.availableSpaces(x, y, this.state.board, this.state.player, this.state.history);
@@ -94,7 +95,6 @@ export default class App extends React.Component {
             check = this.checkChecks(this.state.playerTwoKing[0], this.state.playerTwoKing[1], pathClone, 'TWO');
           }
         }
-        // debugger;
         if(!check){
           boardClone[coord[0]][coord[1]].selected = true;
           path.push(`${coord[0]}${coord[1]}`);
@@ -114,6 +114,10 @@ export default class App extends React.Component {
           }
         }
     })
+    if(checking){
+      console.log('checking for mate')
+      return path
+    }
     this.setState({
       selectedX: x,
       selectedY: y,
@@ -121,7 +125,7 @@ export default class App extends React.Component {
       path: path,
       passants: passants,
       castles: castles,
-    }, () => console.log(this.state.passants, this.state.castles))
+    })
   }
   clearPaths(callback) {
     const boardClone = cloneDeep(this.state.board);
@@ -161,7 +165,6 @@ export default class App extends React.Component {
         }
       }
     }else if(this.state.castles.length){
-      // debugger;
       for(let i = 0; i < this.state.castles.length; i++){
         if(x === this.state.castles[i][0]){
           if(this.state.player === 'ONE'){
@@ -196,7 +199,6 @@ export default class App extends React.Component {
         }
       }
     }
-
     this.state.path.forEach((coord) => {
       let row = Number(coord[0])
       let col = Number(coord[1])
@@ -232,9 +234,16 @@ export default class App extends React.Component {
         player = 'ONE'
       }
       checked = this.checkChecks(kingX, kingY, this.state.board, player)
+      let checkMate = false;
       this.setState({
-          inCheck: checked,
-          player: this.state.player === 'ONE' ? 'TWO' : 'ONE'
+        checkMate: checkMate,
+        inCheck: checked,
+        player: this.state.player === 'ONE' ? 'TWO' : 'ONE'
+      }, () => {
+        if(this.state.inCheck){
+          checkMate = this.checkMate();
+          console.log(checkMate);
+        }
       })
     })
   }
@@ -258,6 +267,23 @@ export default class App extends React.Component {
   // Return true if player in check
   checkChecks(kingX, kingY, board, player){
     return board[kingX][kingY].piece.check(kingX, kingY, board, player);
+  }
+  checkMate(){
+    let checkMate = true;
+    debugger;
+    this.state.board.forEach((row) => {
+      row.forEach((square) => {
+        if(square.piece){
+          if(square.piece.player === this.state.player){
+            let moves = this.generatePaths(square.position[0], square.position[1], true);
+            if(moves.length){
+              checkMate = false;
+            }
+          }
+        }
+      })
+    })
+    return checkMate;
   }
   render() {
     return (
