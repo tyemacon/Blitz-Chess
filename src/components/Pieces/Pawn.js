@@ -90,13 +90,16 @@ export default class Pawn extends Piece {
           }
         }else if(y === 7){
           if(moveFrom[1][6].piece && moveTo[3][6]){
+            availableSpaces.push([2, y - 1])
             availableSpaces.passants.push([2, y - 1])
           }
         }else{
           if(moveFrom[1][y + 1].piece && moveTo[3][y + 1].piece){
+            availableSpaces.push([2, y + 1])
             availableSpaces.passants.push([2, y + 1])
           }
           if(moveFrom[1][y - 1].piece && moveTo[3][y - 1].piece){
+            availableSpaces.push([2, y - 1])
             availableSpaces.passants.push([2, y - 1])
           }    
         }
