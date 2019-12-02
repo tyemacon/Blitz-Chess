@@ -171,10 +171,13 @@ export default class App extends React.Component {
   movePiece(x, y) {
     const boardClone = cloneDeep(this.state.board);
     let selectedPiece = boardClone[this.state.selectedX][this.state.selectedY].piece;
+    if((x === 0 || x === 7) && selectedPiece.value === 1){
+      selectedPiece = new Queen(this.state.player);
+    }
     boardClone[this.state.selectedX][this.state.selectedY].piece = null;
     boardClone[x][y].piece = selectedPiece;
     boardClone[x][y].piece.moved = true;
-    // ^^ Castling ROOKS have not been moved from this ^^
+    // ^^ Castling ROOKS have not been moved yet with this ^^
     if(this.state.board[x][y].piece){
       this.capturePiece(x, y, this.state.board);
     }else if(this.state.passants.length){

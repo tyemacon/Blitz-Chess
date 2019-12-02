@@ -84,12 +84,12 @@ export default class Pawn extends Piece {
         let moveFrom = history[moves][0];
         let moveTo = history[moves][1];
         if(y === 0){
-          if(moveFrom[1][1].piece && moveTo[3][1]){
+          if(moveFrom[1][1].piece && moveTo[3][1].piece){
             availableSpaces.push([2, y + 1])
             availableSpaces.passants.push([2, y + 1])
           }
         }else if(y === 7){
-          if(moveFrom[1][6].piece && moveTo[3][6]){
+          if(moveFrom[1][6].piece && moveTo[3][6].piece){
             availableSpaces.push([2, y - 1])
             availableSpaces.passants.push([2, y - 1])
           }
