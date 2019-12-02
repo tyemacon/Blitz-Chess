@@ -3,7 +3,7 @@ import images from './piece-images';
 
 export default class Rook extends Piece {
   constructor(player){
-    super(player, 5, (player === 'ONE' ? images.rook.white : images.rook.black))
+    super(player, 5, (player === 1 ? images.rook.white : images.rook.black))
     this.availableSpaces = this.availableSpaces.bind(this)
   }
 

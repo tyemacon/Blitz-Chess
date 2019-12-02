@@ -3,7 +3,7 @@ import images from './piece-images';
 
 export default class King extends Piece {
   constructor(player, x, y){
-    super(player, 0, (player === 'ONE' ? images.king.white : images.king.black))
+    super(player, 0, (player === 1 ? images.king.white : images.king.black))
     this.x = x;
     this.y = y;
     this.availableSpaces = this.availableSpaces.bind(this);

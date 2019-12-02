@@ -3,7 +3,7 @@ import images from './piece-images';
 
 export default class Bishop extends Piece {
   constructor(player, x, y){
-    super(player, 3, (player === 'ONE' ? images.bishop.white : images.bishop.black))
+    super(player, 3, (player === 1 ? images.bishop.white : images.bishop.black))
     this.x = x;
     this.y = y;
     this.availableSpaces = this.availableSpaces.bind(this)

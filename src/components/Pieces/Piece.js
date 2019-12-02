@@ -1,5 +1,5 @@
 export default class Piece {
-  constructor(player,value, url){
+  constructor(player, value, url){
     this.player = player;
     this.style = {
       backgroundImage: `url(${url})`,
