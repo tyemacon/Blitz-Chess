@@ -5,6 +5,44 @@ import Bishop from '../Pieces/Bishop';
 import Queen from '../Pieces/Queen';
 import King from '../Pieces/King';
 
+export function castle(castles, board, player, x){
+  for(let i = 0; i < castles.length; i++){
+    if(x === castles[i][0]){
+      if(player === 1){
+        if(castles[i][1] === 6){
+          // castling right
+          let rook = board[0][7].piece;
+          board[0][7].piece = null;
+          board[0][5].piece = rook;
+          board[0][5].piece.moved = true;
+        }else{
+          // castling left
+          let rook = board[0][0].piece;
+          board[0][0].piece = null;
+          board[0][3].piece = rook;
+          board[0][3].piece.moved = true;
+        }
+      }else{
+        if(castles[i][1] === 6){
+          // castling right
+          let rook = board[7][7].piece;
+          board[7][7].piece = null;
+          board[7][5].piece = rook;
+          board[7][5].piece.moved = true;
+        }else{
+          // castling left
+          let rook = board[7][0].piece;
+          board[7][0].piece = null;
+          board[7][3].piece = rook;
+          board[7][3].piece.moved = true;
+        }
+      }
+    }
+  }
+  return board;
+}
+
+
 /** Returns an 8x8 chess Board  */
 export function initializeBoard(){
   const board = [];

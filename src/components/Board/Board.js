@@ -2,7 +2,7 @@ import React from 'react';
 import styles from './Board.module.css';
 import Square from './Square';
 import { cloneDeep } from 'lodash'
-import { initializeBoard } from './boardHelpers';
+import { castle, initializeBoard } from './boardHelpers';
 
 // remove this later
 import Queen from '../Pieces/Queen';
@@ -12,28 +12,19 @@ export default class Board extends React.Component {
     super(props);
     this.state = {
       board: initializeBoard(),
-      oneChange: 'White',
-      twoChange: 'Black',
-      playerOne: 'White',
-      playerTwo: 'Black',
       playerOneKing: [0,4],
       playerTwoKing: [7,4],
-      playerOneScore: 0,
-      playerTwoScore: 0,
       selectedX: null,
       selectedY: null,
       history: [],
       path: [],
       passants: [],
       castles: [],
-      inCheck: false,
-      checkMate: false,
     }
     this.onSelect = this.onSelect.bind(this);
   }
   // manage all logic delegated to each piece
   onSelect(x, y){
-    console.log(this.state.board);
     if(this.state.path.includes(`${x}${y}`)){
       // MOVE THE PIECE
       this.movePiece(x, y);
@@ -125,7 +116,7 @@ export default class Board extends React.Component {
     }, callback)
   }
   movePiece(x, y) {
-    const boardClone = cloneDeep(this.state.board);
+    let boardClone = cloneDeep(this.state.board);
     let selectedPiece = boardClone[this.state.selectedX][this.state.selectedY].piece;
     if((x === 0 || x === 7) && selectedPiece.value === 1){
       selectedPiece = new Queen(this.props.player);
@@ -135,55 +126,23 @@ export default class Board extends React.Component {
     boardClone[x][y].piece.moved = true;
     // ^^ Castling ROOKS have not been moved yet with this ^^
     if(this.state.board[x][y].piece){
-      this.capturePiece(x, y, this.state.board);
+      this.props.capturePiece(x, y, this.state.board);
     }else if(this.state.passants.length){
       for(let i = 0; i < this.state.passants.length; i++){
         if(y === this.state.passants[i][1]){
           if(this.props.player === 1){
-            this.capturePiece(this.state.passants[i][0] - 1, this.state.passants[i][1], boardClone);
+            this.props.capturePiece(this.state.passants[i][0] - 1, this.state.passants[i][1], boardClone);
             boardClone[this.state.passants[i][0] - 1][this.state.passants[i][1]].piece = null;
             break;
           }else{
-            this.capturePiece(this.state.passants[i][0] + 1, this.state.passants[i][1], boardClone);
+            this.props.capturePiece(this.state.passants[i][0] + 1, this.state.passants[i][1], boardClone);
             boardClone[this.state.passants[i][0] + 1][this.state.passants[i][1]].piece = null;
             break;
           }
         }
       }
     }else if(this.state.castles.length){
-      for(let i = 0; i < this.state.castles.length; i++){
-        if(x === this.state.castles[i][0]){
-          if(this.props.player === 1){
-            if(this.state.castles[i][1] === 6){
-              // castling right
-              let rook = boardClone[0][7].piece;
-              boardClone[0][7].piece = null;
-              boardClone[0][5].piece = rook;
-              boardClone[0][5].piece.moved = true;
-            }else{
-              // castling left
-              let rook = boardClone[0][0].piece;
-              boardClone[0][0].piece = null;
-              boardClone[0][3].piece = rook;
-              boardClone[0][3].piece.moved = true;
-            }
-          }else{
-            if(this.state.castles[i][1] === 6){
-              // castling right
-              let rook = boardClone[7][7].piece;
-              boardClone[7][7].piece = null;
-              boardClone[7][5].piece = rook;
-              boardClone[7][5].piece.moved = true;
-            }else{
-              // castling left
-              let rook = boardClone[7][0].piece;
-              boardClone[7][0].piece = null;
-              boardClone[7][3].piece = rook;
-              boardClone[7][3].piece.moved = true;
-            }
-          }
-        }
-      }
+      boardClone = castle(this.state.castles, boardClone, this.state.player, x);
     }
     this.state.path.forEach((coord) => {
       let row = Number(coord[0])
@@ -205,7 +164,6 @@ export default class Board extends React.Component {
       board: boardClone,
       playerOneKing: pOneKing,
       playerTwoKing: pTwoKing,
-      inCheck: false,
       history: [...this.state.history, [moveFrom, moveTo]],
       path: []
     }, () => {
@@ -219,37 +177,14 @@ export default class Board extends React.Component {
         kingY = this.state.playerOneKing[1];
         player = 1
       }
+      /// This is where all the check and checkmate shit happens;
       checked = this.checkChecks(kingX, kingY, this.state.board, player)
-      let checkMate = false;
-      this.setState({
-        checkMate: checkMate,
-        inCheck: checked,
-        player: this.props.player === 1 ? 2 : 1
-      }, () => {
-        if(this.state.inCheck){
-          this.setState({
-            checkMate: this.checkMate()
-          }) 
+      this.props.togglePlayer(checked, () => {
+        if(checked){
+          this.props.setCheckmate(this.checkMate)
         }
       })
     })
-  }
-  capturePiece(x, y, board) {
-    if(this.props.player === 1){
-      let cloneOne = cloneDeep(this.state.playerOneCaptures);
-      cloneOne[board[x][y].piece.value].push(board[x][y].piece)
-      this.setState({
-        playerOneScore: Math.floor(this.state.playerOneScore + board[x][y].piece.value),
-        playerOneCaptures: cloneOne
-      })
-    }else{
-      let cloneTwo = cloneDeep(this.state.playerTwoCaptures);
-      cloneTwo[board[x][y].piece.value].push(board[x][y].piece)
-      this.setState({
-        playerTwoScore: Math.floor(this.state.playerTwoScore + board[x][y].piece.value),
-        playerTwoCaptures: cloneTwo
-      })
-    }
   }
   // Return true if player in check
   checkChecks(kingX, kingY, board, player){
@@ -271,39 +206,24 @@ export default class Board extends React.Component {
     })
     return checkMate;
   }
-  resetGame(){
+  componentDidUpdate(){
+    if(this.props.resetTrigger){
+      this.resetBoard();
+    }
+  }
+  resetBoard(){
     this.setState({
       board: initializeBoard(),
-      player: 1,
-      playerOneCaptures: {
-        1: [],
-        3: [],
-        3.5: [],
-        5: [],
-        9: []
-      },
-      playerTwoCaptures: {
-        1: [],
-        3: [],
-        3.5: [],
-        5: [],
-        9: []
-      },
       playerOneKing: [0,4],
       playerTwoKing: [7,4],
-      playerOneScore: 0,
-      playerTwoScore: 0,
       selectedX: null,
       selectedY: null,
       history: [],
       path: [],
       passants: [],
       castles: [],
-      inCheck: false,
-      checkMate: false,
     })
   }
-
   render(){
     return (
       <div className={styles.board}>
@@ -322,4 +242,3 @@ export default class Board extends React.Component {
   )
 }
 }
-

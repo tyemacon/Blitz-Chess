@@ -2,11 +2,20 @@ import React from 'react';
 import styles from './App.module.css';
 import PlayerCard from './components/PlayerCard';
 import Board from './components/Board/Board';
+import { cloneDeep } from 'lodash'
 export default class App extends React.Component {
   constructor() {
     super()
     this.state = {
       player: 1,
+      oneChange: 'White',
+      twoChange: 'Black',
+      playerOne: 'White',
+      playerTwo: 'Black',
+      checked: false,
+      checkMate: false,
+      playerOneScore: 0,
+      playerTwoScore: 0,
       playerOneCaptures: {
         1: [],
         3: [],
@@ -20,22 +29,17 @@ export default class App extends React.Component {
         3.5: [],
         5: [],
         9: []
-      }
+      }, 
+      resetTrigger: false
     }
-    this.updateName = this.updateName.bind(this);
     this.saveName = this.saveName.bind(this);
+    this.setCheck = this.setCheck.bind(this);
+    this.resetGame = this.resetGame.bind(this);
+    this.updateName = this.updateName.bind(this);
+    this.setCheckMate = this.setCheckMate.bind(this);
+    this.togglePlayer = this.togglePlayer.bind(this);
+    this.capturePiece = this.capturePiece.bind(this);
   }
-  updateName(e, player){
-    if(player === this.state.playerOne){
-      this.setState({
-        oneChange: e.target.value
-      })
-    }else{
-      this.setState({
-        twoChange: e.target.value
-      })
-    }
-  } 
   saveName(player){
     if(player === this.state.playerOne){
       this.setState({
@@ -49,13 +53,83 @@ export default class App extends React.Component {
       })
     }
   }
-  
-  
-
+  updateName(e, player){
+    if(player === this.state.playerOne){
+      this.setState({
+        oneChange: e.target.value
+      })
+    }else{
+      this.setState({
+        twoChange: e.target.value
+      })
+    }
+  } 
+  setCheck(checked){
+    this.setState({checked})
+  }
+  setCheckMate(checkMate){
+    this.setState({
+      checkMate: checkMate
+    })
+  }
+  togglePlayer(checked, callback){
+    this.setState({
+      player: this.state.player === 1 ? 2 : 1,
+      checked: checked
+    }, callback)
+  }
+  capturePiece(x, y, board) {
+    if(this.props.player === 1){
+      let cloneOne = cloneDeep(this.state.playerOneCaptures);
+      cloneOne[board[x][y].piece.value].push(board[x][y].piece)
+      this.setState({
+        playerOneScore: Math.floor(this.state.playerOneScore + board[x][y].piece.value),
+        playerOneCaptures: cloneOne
+      })
+    }else{
+      let cloneTwo = cloneDeep(this.state.playerTwoCaptures);
+      cloneTwo[board[x][y].piece.value].push(board[x][y].piece)
+      this.setState({
+        playerTwoScore: Math.floor(this.state.playerTwoScore + board[x][y].piece.value),
+        playerTwoCaptures: cloneTwo
+      })
+    }
+  }
+  resetGame(){
+    this.setState({
+      resetTrigger: true
+    }, () => {
+      this.setState({
+        player: 1,
+        oneChange: 'White',
+        twoChange: 'Black',
+        playerOne: 'White',
+        playerTwo: 'Black',
+        checked: false,
+        checkMate: false,
+        playerOneScore: 0,
+        playerTwoScore: 0,
+        playerOneCaptures: {
+          1: [],
+          3: [],
+          3.5: [],
+          5: [],
+          9: []
+        },
+        playerTwoCaptures: {
+          1: [],
+          3: [],
+          3.5: [],
+          5: [],
+          9: []
+        },
+        resetTrigger: false
+      })
+    })
+  }
   render() {
     return (
       <div className={styles.game}>
-
         <div className={styles.input} style={{gridArea: 'inputone'}}>
           Player One: Enter your name<br></br>
           <form onSubmit={(e) => {
@@ -83,7 +157,6 @@ export default class App extends React.Component {
           </form>
         </div>
         
-
         <div className={styles.player} style={{gridArea: 'playerone'}}>
           <PlayerCard player={this.state.playerOne} 
           score={this.state.playerOneScore- this.state.playerTwoScore}
@@ -93,8 +166,12 @@ export default class App extends React.Component {
         </div>
         <div className={styles.board}>
           <Board 
-            board={this.state.board}
-            onSelect={this.onSelect}
+            setCheck={this.setCheck}
+            player={this.state.player}
+            setCheckMate={this.setCheckMate}
+            togglePlayer={this.togglePlayer}
+            capturePiece={this.capturePiece}
+            resetTrigger={this.state.resetTrigger}
           />
         </div>
         <div className={styles.player} style={{gridArea: 'playertwo'}}>
