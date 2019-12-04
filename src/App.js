@@ -33,7 +33,6 @@ export default class App extends React.Component {
       resetTrigger: false
     }
     this.saveName = this.saveName.bind(this);
-    this.setCheck = this.setCheck.bind(this);
     this.resetGame = this.resetGame.bind(this);
     this.updateName = this.updateName.bind(this);
     this.setCheckMate = this.setCheckMate.bind(this);
@@ -64,22 +63,22 @@ export default class App extends React.Component {
       })
     }
   } 
-  setCheck(checked){
-    this.setState({checked})
-  }
+  // Notify players of gameover
   setCheckMate(checkMate){
     this.setState({
       checkMate: checkMate
     })
   }
+  // Change current player and set check (if checked)
   togglePlayer(checked, callback){
     this.setState({
       player: this.state.player === 1 ? 2 : 1,
       checked: checked
     }, callback)
   }
+  // Add captured piece to array to display and update score
   capturePiece(x, y, board) {
-    if(this.props.player === 1){
+    if(this.state.player === 1){
       let cloneOne = cloneDeep(this.state.playerOneCaptures);
       cloneOne[board[x][y].piece.value].push(board[x][y].piece)
       this.setState({
@@ -166,7 +165,6 @@ export default class App extends React.Component {
         </div>
         <div className={styles.board}>
           <Board 
-            setCheck={this.setCheck}
             player={this.state.player}
             setCheckMate={this.setCheckMate}
             togglePlayer={this.togglePlayer}

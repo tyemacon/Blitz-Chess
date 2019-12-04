@@ -2,10 +2,7 @@ import React from 'react';
 import styles from './Board.module.css';
 import Square from './Square';
 import { cloneDeep } from 'lodash'
-import { castle, initializeBoard } from './boardHelpers';
-
-// remove this later
-import Queen from '../Pieces/Queen';
+import { castle, promotePawn, initializeBoard } from './boardHelpers';
 
 export default class Board extends React.Component {
   constructor(props){
@@ -23,32 +20,34 @@ export default class Board extends React.Component {
     }
     this.onSelect = this.onSelect.bind(this);
   }
-  // manage all logic delegated to each piece
+  // Manage board state based on square selected
   onSelect(x, y){
+    // Move piece if in allowed path
     if(this.state.path.includes(`${x}${y}`)){
-      // MOVE THE PIECE
       this.movePiece(x, y);
+    // Clear the paths if the piece was re-selected or an empty square was selected
     }else if((this.state.selectedX === x && this.state.selectedY === y) || !this.state.board[x][y].piece){
-      // CLEAR PATHS
       if(!isNaN(this.state.selectedX)){
         this.clearPaths();
       }
+    // Generate the paths if player selected own piece
     }else if(this.state.board[x][y].piece.player === this.props.player){
-      // GENERATE MOVE PATHS
       if(this.state.selectedX !== null){
-        // CLEAR PATHS IF CLICKED ON DIFFERENT PIECES
+        // Clear the paths and generate another set if different piece was selected
         this.clearPaths(() => this.generatePaths(x, y))
       }else{
-        console.log('lets generate')
         this.generatePaths(x, y)
       }
     }
   }
-
+  // Generate all allowable spaces for piece to move
   generatePaths(x, y, checking){
+    // Save selected piece and create a copy of the board to preserve/save history
+    // Use selected piece to generate unique path set (up to/including another piece on the board)
     let selectedPiece = this.state.board[x][y].piece;
     const boardClone = cloneDeep(this.state.board);
     const availableSpaces = selectedPiece.availableSpaces(x, y, this.state.board, this.props.player, this.state.history);
+    // Initialize empty arrays for paths and possible passants/castles
     let path = [];
     let passants = [];
     let castles = [];
@@ -102,6 +101,7 @@ export default class Board extends React.Component {
       castles: castles,
     })
   }
+  // Clear the current path, takes callback as paramater if needed
   clearPaths(callback) {
     const boardClone = cloneDeep(this.state.board);
     this.state.path.forEach((coord) => {
@@ -120,7 +120,7 @@ export default class Board extends React.Component {
     let boardClone = cloneDeep(this.state.board);
     let selectedPiece = boardClone[this.state.selectedX][this.state.selectedY].piece;
     if((x === 0 || x === 7) && selectedPiece.value === 1){
-      selectedPiece = new Queen(this.props.player);
+      selectedPiece = promotePawn(this.props.player);
     }
     boardClone[this.state.selectedX][this.state.selectedY].piece = null;
     boardClone[x][y].piece = selectedPiece;
@@ -191,6 +191,7 @@ export default class Board extends React.Component {
   checkChecks(kingX, kingY, board, player){
     return board[kingX][kingY].piece.check(kingX, kingY, board, player);
   }
+  // Analyze all paths to King to determine checkmate
   checkMate(){
     let checkMate = true;
     this.state.board.forEach((row) => {
@@ -207,6 +208,7 @@ export default class Board extends React.Component {
     })
     return checkMate;
   }
+  // Reset the game board if button clicked
   componentDidUpdate(){
     if(this.props.resetTrigger){
       this.resetBoard();
@@ -228,18 +230,18 @@ export default class Board extends React.Component {
   render(){
     return (
       <div className={styles.board}>
-      {this.state.board.map((row, i) => {
-        return row.map((square, j) => 
-          <Square key={`${i}${j}`} 
-          x={square.position[0]} 
-          y={square.position[1]} 
-          piece={square.piece}
-          selected={square.selected}
-          onSelect={this.onSelect}
-          />
-        )
-      })}
-    </div>
-  )
-}
+        {this.state.board.map((row, i) => {
+          return row.map((square, j) => 
+            <Square key={`${i}${j}`} 
+            x={square.position[0]} 
+            y={square.position[1]} 
+            piece={square.piece}
+            selected={square.selected}
+            onSelect={this.onSelect}
+            />
+          )
+        })}
+      </div>
+    )
+  }
 }

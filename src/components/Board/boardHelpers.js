@@ -5,6 +5,10 @@ import Bishop from '../Pieces/Bishop';
 import Queen from '../Pieces/Queen';
 import King from '../Pieces/King';
 
+export function promotePawn(player){
+  return new Queen(player);
+}
+
 export function castle(castles, board, player, x){
   for(let i = 0; i < castles.length; i++){
     // only the x coordinate needs to match
