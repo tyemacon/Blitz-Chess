@@ -1,9 +1,9 @@
 import Piece from './Piece';
-import images from './piece-images';
+import { pawn } from './piece-images';
 
 export default class Pawn extends Piece {
   constructor(player){
-    super(player, 1, (player === 1 ? images.pawn.white : images.pawn.black))
+    super(player, 1, (player === 1 ? pawn.white : pawn.black))
     this.availableSpaces =  this.availableSpaces.bind(this)
   }
 
@@ -12,7 +12,7 @@ export default class Pawn extends Piece {
     let availableSpaces = [];
     availableSpaces.passants = [];
     let pawnMoves = []
-    if(this.player === 'ONE'){
+    if(this.player === 1){
       pawnMoves = [[1,0]]
       if(x === 1){
         pawnMoves.push([2,0])

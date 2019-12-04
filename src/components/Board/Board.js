@@ -35,10 +35,11 @@ export default class Board extends React.Component {
       }
     }else if(this.state.board[x][y].piece.player === this.props.player){
       // GENERATE MOVE PATHS
-      if(!isNaN(this.state.selectedX)){
+      if(this.state.selectedX !== null){
         // CLEAR PATHS IF CLICKED ON DIFFERENT PIECES
         this.clearPaths(() => this.generatePaths(x, y))
       }else{
+        console.log('lets generate')
         this.generatePaths(x, y)
       }
     }
@@ -181,7 +182,7 @@ export default class Board extends React.Component {
       checked = this.checkChecks(kingX, kingY, this.state.board, player)
       this.props.togglePlayer(checked, () => {
         if(checked){
-          this.props.setCheckmate(this.checkMate)
+          this.props.setCheckMate(this.checkMate())
         }
       })
     })

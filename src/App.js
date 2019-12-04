@@ -185,7 +185,7 @@ export default class App extends React.Component {
           {!this.state.checkMate ?
             <h2>
               {`${this.state.player === 1 ? this.state.playerOne : this.state.playerTwo}'s turn `}
-              {this.state.inCheck && "- You're in check! "}
+              {this.state.checked && "- You're in check! "}
             </h2> 
             :
             <h2>

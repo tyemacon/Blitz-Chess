@@ -11,8 +11,8 @@ export default class King extends Piece {
     this.rookDirs = [[1,0], [-1,0],[0,1],[0,-1]];
     this.bishopDirs = [[1,1],[1,-1],[-1,1],[-1,-1]];
     this.pawnDirs = {
-      'ONE': [[1,-1],[1,1]],
-      'TWO': [[-1,-1],[-1,1]]
+      1: [[1,-1],[1,1]],
+      2: [[-1,-1],[-1,1]]
     };
     this.knightDirs = [
       [-2,1], // up2 -> right1
@@ -123,7 +123,7 @@ export default class King extends Piece {
     // LOOK FOR CASTLING
     // Do nothing if king has moved
     if(!board[x][y].piece.moved){
-      if(player === 'ONE'){
+      if(player ===  1){
         if(board[0][0].piece){
           if(!board[0][0].piece.moved && board[0][0].piece.value === 5){
             if(!board[0][1].piece && !board[0][2].piece && !board[0][3].piece){
