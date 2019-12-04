@@ -143,7 +143,7 @@ export default class Board extends React.Component {
         }
       }
     }else if(this.state.castles.length){
-      boardClone = castle(this.state.castles, boardClone, this.state.player, x);
+      boardClone = castle(this.state.castles, boardClone, this.props.player, x);
     }
     this.state.path.forEach((coord) => {
       let row = Number(coord[0])

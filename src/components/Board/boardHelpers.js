@@ -7,6 +7,8 @@ import King from '../Pieces/King';
 
 export function castle(castles, board, player, x){
   for(let i = 0; i < castles.length; i++){
+    // only the x coordinate needs to match
+    // x can only be 0 or 7 
     if(x === castles[i][0]){
       if(player === 1){
         if(castles[i][1] === 6){
