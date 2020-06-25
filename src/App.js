@@ -130,7 +130,7 @@ export default class App extends React.Component {
     return (
       <div className={styles.game}>
         <div className={styles.input} style={{gridArea: 'inputone'}}>
-          Player One: Enter yourses name<br></br>
+          Player One: Enter your name<br></br>
           <form onSubmit={(e) => {
               e.preventDefault();
               this.saveName(this.state.playerOne)}}>
